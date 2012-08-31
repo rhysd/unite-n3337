@@ -116,7 +116,7 @@ g:unite_n3337_is_multiline        *g:unite_n3337_is_multiline*
 ==============================================================================
 SETTING EXAMPLE                                          *unite-n3337-example*
 
-This is example setting for |unite-n3337|.
+This is an example of setting for |unite-n3337|.
 >
   let g:unite_n3337_pdf = $HOME."/Documents/C++/n3337.pdf"
 
