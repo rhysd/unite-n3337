@@ -1,10 +1,26 @@
 scriptencoding utf-8
 
+let s:save_cpo = &cpo
+set cpo&vim
+
+let s:source = {
+    \   "name" : "n3337",
+    \   "description" : "quick look into N3337, Working Draft standard for C++ which is the nearest to ISO/IEC 14882/2011.",
+    \   "default_action" : {'*' : 'action__n3337_lines'},
+    \   "action_table" : {},
+    \}
+
+function! unite#sources#n3337#define()
+    return s:source
+endfunction
+
 " check variables {{{
 
 " check g:unite_n3337_pdf {{{
 " If you don't have PDF file, get it from http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2012/n3337.pdf
 if !exists('g:unite_n3337_pdf') && !exists('g:unite_n3337_txt')
+    let &cpo = s:save_cpo
+    unlet s:save_cpo
     echoerr "get N3337 PDF file from http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2012/n3337.pdf and set its path to g:unite_n3337_pdf!"
     finish
 endif
@@ -19,6 +35,8 @@ if !exists('g:unite_n3337_txt')
 
     if !filereadable(g:unite_data_directory.'/n3337/n3337.txt')
         if !executable('pdftotext')
+            let &cpo = s:save_cpo
+            unlet s:save_cpo
             echoerr "Install pdftotext command, or set n3337.txt location to g:unite_n3337_txt"
             finish
         endif
@@ -33,17 +51,6 @@ endif
 
 let g:unite_n3337_is_multiline = get(g:, "unite_n3337_is_multiline", 0)
 "}}}
-
-
-let s:save_cpo = &cpo
-set cpo&vim
-
-let s:source = {
-    \   "name" : "n3337",
-    \   "description" : "quick look into N3337, Working Draft standard for C++ which is the nearest to ISO/IEC 14882/2011.",
-    \   "default_action" : {'*' : 'action__n3337_lines'},
-    \   "action_table" : {},
-    \}
 
 function! s:source.gather_candidates(args, context) " {{{
 
@@ -114,10 +121,6 @@ endfunction
 
 let s:source.action_table = s:my_action_table
 "}}}
-
-function! unite#sources#n3337#define()
-    return s:source
-endfunction
 
 let &cpo = s:save_cpo
 unlet s:save_cpo
