@@ -42,7 +42,7 @@ let s:source = {
     \   "name" : "n3337",
     \   "description" : "quick look into N3337, Working Draft standard for C++ which is the nearest to ISO/IEC 14882/2011.",
     \   "default_action" : {'*' : 'action__n3337_lines'},
-    \   "action_table" : {}
+    \   "action_table" : {},
     \}
 
 function! s:source.gather_candidates(args, context) " {{{
@@ -80,14 +80,18 @@ endfunction
 " original action {{{
 let s:my_action_table = {}
 
+" main action {{{
 let s:my_action_table.action__n3337_lines = {
             \ 'description' : 'jump to the line of N3337',
             \ }
 function! s:my_action_table.action__n3337_lines.func(candidate)
     execute "view ".g:unite_n3337_txt
+    " setl syntax=cpp
     call setpos('.',[0,a:candidate.source__n3337_line,1,0])
 endfunction
+"}}}
 
+" preview action {{{
 let s:my_action_table.preview = {
             \ 'description' : 'preview this title of N3337',
             \ 'is_quit' : 0
@@ -105,12 +109,8 @@ function! s:my_action_table.preview.func(candidate)
                     \       g:unite_n3337_txt)))
     endif
 
-
-    " execute "pedit! ".g:unite_n3337_txt
-    " execute bufwinnr(a:candidate.action__buffer_nr) . 'wincmd w'
-    " call setpos('.',[0,a:candidate.source__n3337_line,1,0])
-    " execute winnr . 'wincmd w'
 endfunction
+"}}}
 
 let s:source.action_table = s:my_action_table
 "}}}
