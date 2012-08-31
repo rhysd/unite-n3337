@@ -17,13 +17,19 @@ endfunction
 " check variables {{{
 
 " check g:unite_n3337_pdf {{{
-" If you don't have PDF file, get it from http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2012/n3337.pdf
-if !exists('g:unite_n3337_pdf') && !exists('g:unite_n3337_txt')
-    let &cpo = s:save_cpo
-    unlet s:save_cpo
-    echoerr "get N3337 PDF file from http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2012/n3337.pdf and set its path to g:unite_n3337_pdf!"
-    finish
+if !exists('g:unite_n3337_txt')
+
+    " If you don't have PDF file, get it from http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2012/n3337.pdf
+    if !exists('g:unite_n3337_pdf') || !filereadable(g:unite_n3337_pdf)
+        let &cpo = s:save_cpo
+        unlet s:save_cpo
+        echoerr "get N3337 PDF file from http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2012/n3337.pdf and set its path to g:unite_n3337_pdf!"
+        finish
+    endif
+
 endif
+
+
 "}}}
 
 if !isdirectory(g:unite_data_directory."/n3337")
