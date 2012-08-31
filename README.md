@@ -1,6 +1,6 @@
 #see http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2012/
 
-This is a Vim plugin for unite.vim to look in N3337 quickly.
+This is a Vim plugin for unite.vim to look in highlighted N3337 quickly.
 
 This plugin requires `pdftotext` command and n3337.pdf if you don't have a plain-text file of N3337.
 

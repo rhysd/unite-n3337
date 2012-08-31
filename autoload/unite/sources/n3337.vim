@@ -86,8 +86,8 @@ let s:my_action_table.action__n3337_lines = {
             \ }
 function! s:my_action_table.action__n3337_lines.func(candidate)
     execute "view +".a:candidate.source__n3337_line." ".g:unite_n3337_txt
-    setl syntax=uniteSource__N3337
-    setl nowrap
+    setl syntax=unite-source-N3337
+    setl nowrap nonumber
 endfunction
 "}}}
 
