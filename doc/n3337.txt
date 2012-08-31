@@ -90,11 +90,21 @@ g:unite_n3337_pdf                 *g:unite_n3337_pdf*
   String of path to |n3337.pdf|.
   You must set this variable.
 
+  Example:
+>
+  let g:unite_n3337_pdf = $HOME."/Documents/C++/n3337.pdf"
+<
+
 g:unite_n3337_txt                 *g:unite_n3337_txt*
 
   String of path to |n3337.txt|.
   This variable is optional. If omitted, this plugin automatically converts
   from |n3337.pdf| to |n3337.txt| and sets its path to |g:unite_n3337_txt|.
+
+  Example:
+>
+  let g:unite_n3337_txt = $HOME."/Documents/C++/n3337.txt"
+<
 
 g:unite_n3337_is_multiline        *g:unite_n3337_is_multiline*
 
