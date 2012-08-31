@@ -85,9 +85,9 @@ let s:my_action_table.action__n3337_lines = {
             \ 'description' : 'jump to the line of N3337',
             \ }
 function! s:my_action_table.action__n3337_lines.func(candidate)
-    execute "view ".g:unite_n3337_txt
-    setl syntax=unite-n3337
-    call setpos('.',[0,a:candidate.source__n3337_line,1,0])
+    execute "view +".a:candidate.source__n3337_line." ".g:unite_n3337_txt
+    setl syntax=uniteSource__N3337
+    setl nowrap
 endfunction
 "}}}
 
