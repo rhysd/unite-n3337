@@ -8,3 +8,7 @@ This plugin requires `pdftotext` command and n3337.pdf if you don't have a plain
 - `g:unite_n3337_txt` is a path to a plain-text file of N3337. This variable is optional.
 
 This plugin is distributed under MIT License ( http://opensource.org/licenses/mit-license.php ).
+
+Screenshot:
+
+![Alt text](http://cdn-ak.f.st-hatena.com/images/fotolife/r/rhysd/20120831/20120831194551.jpg "unite-n3337")
