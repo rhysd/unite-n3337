@@ -98,7 +98,7 @@ g:unite_n3337_txt                 *g:unite_n3337_txt*
 
 g:unite_n3337_is_multiline        *g:unite_n3337_is_multiline*
 
-  If this variable is 1, use multi lines if candidate is long in |unite.vim|
+  If the value is 1, use multi lines if candidate is long in |unite.vim|
   interface. See |unite-notation-{candidate}| to get more information.
 
   Default value is 0.
