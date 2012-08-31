@@ -1,0 +1,146 @@
+*unite-n3337*
+
+Author : rhysd <lin90162@yahoo.co.jp>
+
+CONTENTS                                                *unite-n3337-contents*
+
+Introduction        |unite-n3337-introduction|
+Usage               |unite-n3337-usage|
+Install             |unite-n3337-install|
+Dependency          |unite-n3337-dependency|
+Files               |unite-n3337-files|
+Variables           |unite-n3337-variables|
+Setting Example     |unite-n3337-example|
+License             |unite-n3337-license|
+
+==============================================================================
+INTRODUCTION                                       *unite-n3337-introduction*
+
+|unite-n3337| is a Vim plugin for |unite.vim| to look in highlighted N3337
+quickly.  N3337 is Working Draft, Standard for C++, which is the nearest draft
+to ISO/IEC 14882:2011.
+
+==============================================================================
+USAGE                                                     *unite-n3337-usage*
+
+You can look sections of N3337 with |unite| interface using following command.
+>
+  :Unite n3337
+<
+
+If you want to choose a section with preview, following command enables auto
+preview.
+>
+  :Unite -auto-preview n3337
+<
+
+After choosing a section, N3337 text file is opened and highlighted.
+If you use |unite-n3337| at first time, it takes a few seconds or more to
+convert file format and cache section data.
+
+More information about |unite.vim| is available at
+>
+  :help unite.vim
+<
+==============================================================================
+INSTALL                                                  *unite-n3337-install*
+
+Install the distributed files into Vim script directory which is usually
+~/.vim/, or $HOME/vimfiles on Windows.
+
+If you use |neobundle.vim|, execute following commands.
+>
+  :NeoBundle 'rhysd/unite-n3337'
+  :NeoBundleInstall
+<
+
+If you use |vundle.vim|, execute following commands.
+>
+  :Bundle 'rhysd/unite-n3337'
+  :BundleInstall
+<
+
+==============================================================================
+DEPENDENCY                                            *unite-n3337-dependency*
+
+|unite-n3337| depends on |unite.vim|. So, please make sure that |unite.vim| is
+installed.
+
+If you have pdf file of N3337 and don't have plain-text file of N3337,
+pdftotext command is required to convert from pdf to plain-text.
+
+==============================================================================
+FILES                                                      *unite-n3337-files*
+
+  n3337.pdf                         *n3337.pdf*
+
+    |n3337.pdf| is the original pdf file of N3337. You can download this file
+    from http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2012/n3337.pdf .
+
+  n3337.txt                         *n3337.txt*
+
+    |n3337.txt| is a plain-text file of N3337. You need not get this file
+    because this file is converted from |n3337.pdf| automatically.
+
+==============================================================================
+VARIABLES                                              *unite-n3337-variables*
+
+g:unite_n3337_pdf                 *g:unite_n3337_pdf*
+
+  String of path to |n3337.pdf|.
+  You must set this variable.
+
+g:unite_n3337_txt                 *g:unite_n3337_txt*
+
+  String of path to |n3337.txt|.
+  This variable is optional. If omitted, this plugin automatically converts
+  from |n3337.pdf| to |n3337.txt| and sets its path to |g:unite_n3337_txt|.
+
+g:unite_n3337_is_multiline        *g:unite_n3337_is_multiline*
+
+  If this variable is 1, use multi lines if candidate is long in |unite.vim|
+  interface. See |unite-notation-{candidate}| to get more information.
+
+  Default value is 0.
+
+==============================================================================
+SETTING EXAMPLE                                          *unite-n3337-example*
+
+This is example setting for |unite-n3337|.
+>
+  let g:unite_n3337_pdf = $HOME."/Documents/C++"
+
+  augroup UniteN3337
+    autocmd!
+    autocmd FileType cpp nnoremap <buffer><Space>n
+                            \ :<C-u>Unite -auto-preview n3337<CR>
+  augroup END
+<
+
+==============================================================================
+License                                                  *unite-n3337-license*
+
+|unite-n3337| is distributed under MIT license.
+
+  Copyright (c) 2012 rhysd
+
+  Permission is hereby granted, free of charge, to any person obtaining
+  a copy of this software and associated documentation files (the
+  "Software"), to deal in the Software without restriction, including
+  without limitation the rights to use, copy, modify, merge, publish,
+  distribute, sublicense, and/or sell copies of the Software, and to
+  permit persons to whom the Software is furnished to do so, subject to
+  the following conditions:
+  The above copyright notice and this permission notice shall be
+  included in all copies or substantial portions of the Software.
+
+  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+  EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+  MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
+  IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY
+  CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
+  TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
+  SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+
+==============================================================================
+vim:tw=78:ts=8:ft=help:norl:noet:fen:fdl=0:
