@@ -14,68 +14,67 @@ function! unite#sources#n3337#define()
     return s:source
 endfunction
 
-" check variables {{{
+" check variables on init
+let s:source.hooks = {}
+function! s:source.hooks.on_init(args,context)
 
-" check g:unite_n3337_pdf {{{
-if !exists('g:unite_n3337_txt')
+    " use is_multiline or not
+    let g:unite_n3337_is_multiline = get(g:, "unite_n3337_is_multiline", 0)
 
-    " If you don't have PDF file, get it from http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2012/n3337.pdf
-    if !exists('g:unite_n3337_pdf') || !filereadable(g:unite_n3337_pdf)
-        let &cpo = s:save_cpo
-        unlet s:save_cpo
-        echoerr "get N3337 PDF file from http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2012/n3337.pdf and set its path to g:unite_n3337_pdf!"
-        finish
+    " check data dir  {{{
+    if !isdirectory(g:unite_data_directory."/n3337")
+        call mkdir(g:unite_data_directory."/n3337","p")
     endif
+    "}}}
 
-endif
-
-
-"}}}
-
-if !isdirectory(g:unite_data_directory."/n3337")
-    call mkdir(g:unite_data_directory."/n3337","p")
-endif
-
-" check g:unite_n3337_txt {{{
-if !exists('g:unite_n3337_txt')
-
-    if !filereadable(g:unite_data_directory.'/n3337/n3337.txt')
-        if !executable('pdftotext')
-            let &cpo = s:save_cpo
-            unlet s:save_cpo
-            echoerr "Install pdftotext command, or set n3337.txt location to g:unite_n3337_txt"
-            finish
+    if !exists('g:unite_n3337_txt')
+        " check g:unite_n3337_pdf {{{
+        " If you don't have PDF file, get it from http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2012/n3337.pdf
+        if !exists('g:unite_n3337_pdf') || !filereadable(g:unite_n3337_pdf)
+            echoerr "get N3337 PDF file from http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2012/n3337.pdf and set its path to g:unite_n3337_pdf!"
+            return
         endif
-        " generate text data of n3337 using pdftotext
-        execute "!pdftotext -layout -nopgbrk ".g:unite_n3337_pdf." - > ".g:unite_data_directory."/n3337/n3337.txt"
+        "}}}
+
+        " check g:unite_n3337_txt {{{
+        if !filereadable(g:unite_data_directory.'/n3337/n3337.txt')
+            if !executable('pdftotext')
+                echoerr "Install pdftotext command, or set n3337.txt location to g:unite_n3337_txt"
+                return
+            endif
+            " generate text data of n3337 using pdftotext
+            execute "!pdftotext -layout -nopgbrk ".g:unite_n3337_pdf." - > ".g:unite_data_directory."/n3337/n3337.txt"
+        endif
+        let g:unite_n3337_txt = g:unite_data_directory."/n3337/n3337.txt"
+        "}}}
+
     endif
 
-    let g:unite_n3337_txt = g:unite_data_directory."/n3337/n3337.txt"
 
-endif
-"}}}
+endfunction
 
-let g:unite_n3337_is_multiline = get(g:, "unite_n3337_is_multiline", 0)
+" contract section titles {{{
+function! s:cache_sections()
+    let n3337 = readfile(g:unite_n3337_txt)
+    let sections = []
+
+    for linum in range(1,len(n3337))
+        let idx = linum - 1
+        let match = matchlist(n3337[idx],'^\s*\([0-9.]\+\)\s\+\([^\[]\+\)\[[a-z.]\+]$')
+        if !empty(match) && match[2] !~# '^\s\+$'
+            call add(sections, linum."\t".match[1]."\t".substitute(match[2], '\s*$','',''))
+        endif
+    endfor
+
+    call writefile(sections, g:unite_data_directory."/n3337/sections")
+endfunction
 "}}}
 
 function! s:source.gather_candidates(args, context) " {{{
 
-    " contract section titles {{{
     if !filereadable(g:unite_data_directory."/n3337/sections")
-        let n3337 = readfile(g:unite_n3337_txt)
-        let sections = []
-
-        for linum in range(1,len(n3337))
-            let idx = linum - 1
-            let match = matchlist(n3337[idx],'^\s*\([0-9.]\+\)\s\+\([^\[]\+\)\[[a-z.]\+]$')
-            if !empty(match) && match[2] !~# '^\s\+$'
-                call add(sections, linum."\t".match[1]."\t".substitute(match[2], '\s*$','',''))
-            endif
-        endfor
-
-        call writefile(sections, g:unite_data_directory."/n3337/sections")
+        call s:cache_sections()
     endif
-    "}}}
 
     " make candidates "{{{
     let sections = map( readfile(g:unite_data_directory."/n3337/sections"),"split(v:val,'\t')" )
