@@ -14,12 +14,24 @@ function! unite#sources#n3337#define()
     return s:source
 endfunction
 
-" check variables on init
+function! s:system(cmd) "{{{
+    try
+        call vimproc#system(a:cmd)
+    catch
+        call system(a:cmd)
+    endtry
+endfunction
+"}}}
+
+" check variables on init hook "{{{
 let s:source.hooks = {}
 function! s:source.hooks.on_init(args,context)
 
     " use is_multiline or not
     let g:unite_n3337_is_multiline = get(g:, "unite_n3337_is_multiline", 0)
+
+    " use indents of sections or not
+    let g:unite_n3337_indent_section = get(g:, "unite_n3337_indent_section", 0)
 
     " check data dir  {{{
     if !isdirectory(g:unite_data_directory."/n3337")
@@ -43,18 +55,18 @@ function! s:source.hooks.on_init(args,context)
                 return
             endif
             " generate text data of n3337 using pdftotext
-            execute "!pdftotext -layout -nopgbrk ".g:unite_n3337_pdf." - > ".g:unite_data_directory."/n3337/n3337.txt"
+            echo "convert pdf to plain-text..."
+            call s:system("pdftotext -layout -nopgbrk ".g:unite_n3337_pdf." - > ".g:unite_data_directory."/n3337/n3337.txt")
+            echo "done."
         endif
         let g:unite_n3337_txt = g:unite_data_directory."/n3337/n3337.txt"
         "}}}
-
     endif
 
-
 endfunction
+"}}}
 
-" contract section titles {{{
-function! s:cache_sections()
+function! s:cache_sections() "{{{
     let n3337 = readfile(g:unite_n3337_txt)
     let sections = []
 
@@ -76,15 +88,16 @@ function! s:source.gather_candidates(args, context) " {{{
         call s:cache_sections()
     endif
 
-    " make candidates "{{{
+    " make candidates from cache {{{
     let sections = map( readfile(g:unite_data_directory."/n3337/sections"),"split(v:val,'\t')" )
 
     return map(sections, "{
-    \ 'word' : v:val[1].repeat(' ', 15-strlen(v:val[1])).': '.v:val[2],
+    \ 'word' : v:val[1].repeat(' ', 15-strlen(v:val[1])).': '
+                \ .(g:unite_n3337_indent_section ? repeat('  ', len(split(v:val[1],'\\.'))-1) : '').v:val[2],
     \ 'is_multiline' : g:unite_n3337_is_multiline,
     \ 'source__n3337_line' : v:val[0]
     \ }" )
-"}}}
+    "}}}
 
 endfunction
 "}}}
