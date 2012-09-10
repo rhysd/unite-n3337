@@ -3,6 +3,7 @@ scriptencoding utf-8
 let s:save_cpo = &cpo
 set cpo&vim
 
+" source definition "{{{
 let s:source = {
     \   "name" : "n3337",
     \   "description" : "quick look into N3337, Working Draft standard for C++ which is the nearest to ISO/IEC 14882/2011.",
@@ -10,10 +11,15 @@ let s:source = {
     \   "action_table" : {},
     \}
 
+" hooks
+let s:source.hooks = {}
+
 function! unite#sources#n3337#define()
     return s:source
 endfunction
+"}}}
 
+" helpers "{{{
 function! s:system(cmd) "{{{
     try
         call vimproc#system(a:cmd)
@@ -23,9 +29,17 @@ function! s:system(cmd) "{{{
 endfunction
 "}}}
 
+" get script local ID {{{
+function! s:get_SID()
+  return matchstr(expand('<sfile>'), '<SNR>\d\+_')
+endfunction
+let s:SID = s:get_SID()
+delfunction s:get_SID
+"}}}
+"}}}
+
 " check variables on init hook "{{{
-let s:source.hooks = {}
-function! s:source.hooks.on_init(args,context)
+function! s:check_variables_on_init(args,context)
 
     " use is_multiline or not
     let g:unite_n3337_is_multiline = get(g:, "unite_n3337_is_multiline", 0)
@@ -64,6 +78,7 @@ function! s:source.hooks.on_init(args,context)
     endif
 
 endfunction
+let s:source.hooks.on_init = function(s:SID.'check_variables_on_init')
 "}}}
 
 function! s:cache_sections() "{{{
@@ -102,18 +117,20 @@ function! s:source.gather_candidates(args, context) " {{{
 endfunction
 "}}}
 
-" original action {{{
+" original actions {{{
 let s:my_action_table = {}
 
 " main action {{{
 let s:my_action_table.action__n3337_lines = {
             \ 'description' : 'jump to the line of N3337',
             \ }
-function! s:my_action_table.action__n3337_lines.func(candidate)
+
+function! s:open_action(candidate)
     execute "view +".a:candidate.source__n3337_line." ".g:unite_n3337_txt
     setl syntax=unite-source-N3337
     setl nowrap nonumber
 endfunction
+let s:my_action_table.action__n3337_lines.func = function(s:SID.'open_action')
 "}}}
 
 " preview action {{{
@@ -121,7 +138,7 @@ let s:my_action_table.preview = {
             \ 'description' : 'preview this title of N3337',
             \ 'is_quit' : 0
             \ }
-function! s:my_action_table.preview.func(candidate)
+function! s:preview_action(candidate)
 
     let buflisted = buflisted(
                 \ unite#util#escape_file_searching(
@@ -135,6 +152,7 @@ function! s:my_action_table.preview.func(candidate)
     endif
 
 endfunction
+let s:my_action_table.preview.func = function(s:SID.'preview_action')
 "}}}
 
 let s:source.action_table = s:my_action_table
