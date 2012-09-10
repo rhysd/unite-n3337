@@ -31,7 +31,7 @@ function! s:source.hooks.on_init(args,context)
     let g:unite_n3337_is_multiline = get(g:, "unite_n3337_is_multiline", 0)
 
     " use indents of sections or not
-    let g:unite_n3337_indent_section = get(g:, "unite_n3337_indent_section", 0)
+    let g:unite_n3337_indent_section = get(g:, "unite_n3337_indent_section", 1)
 
     " check data dir  {{{
     if !isdirectory(g:unite_data_directory."/n3337")
