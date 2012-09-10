@@ -106,6 +106,14 @@ g:unite_n3337_txt                 *g:unite_n3337_txt*
   let g:unite_n3337_txt = $HOME."/Documents/C++/n3337.txt"
 <
 
+g:unite_n3337_indent_section      *g:unite_n3337_indent_section*
+
+  This variable show that section titles of |unite-n3337| candidates are
+  indented or not. If the value is 1, section titles are indented by section
+  numbers.
+
+  Default value is 1.
+
 g:unite_n3337_is_multiline        *g:unite_n3337_is_multiline*
 
   If the value is 1, use multi lines if candidate is long in |unite.vim|
