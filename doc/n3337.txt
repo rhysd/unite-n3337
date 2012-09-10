@@ -112,7 +112,7 @@ g:unite_n3337_indent_section      *g:unite_n3337_indent_section*
   indented or not. If the value is 1, section titles are indented by section
   numbers.
 
-  Default value is 1.
+  Default value is 0.
 
 g:unite_n3337_is_multiline        *g:unite_n3337_is_multiline*
 
