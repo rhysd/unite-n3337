@@ -57,7 +57,7 @@ function! s:check_variables_on_init(args,context)
         " check g:unite_n3337_pdf {{{
         " If you don't have PDF file, get it from http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2012/n3337.pdf
         if !exists('g:unite_n3337_pdf') || !filereadable(g:unite_n3337_pdf)
-            echoerr "get N3337 PDF file from http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2012/n3337.pdf and set its path to g:unite_n3337_pdf!"
+            call unite#print_error("Get N3337 PDF file from http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2012/n3337.pdf and set its path to g:unite_n3337_pdf.")
             return
         endif
         "}}}
@@ -65,7 +65,7 @@ function! s:check_variables_on_init(args,context)
         " check g:unite_n3337_txt {{{
         if !filereadable(g:unite_data_directory.'/n3337/n3337.txt')
             if !executable('pdftotext')
-                echoerr "Install pdftotext command, or set n3337.txt location to g:unite_n3337_txt"
+                call unite#print_error("Install pdftotext command, or set n3337.txt location to g:unite_n3337_txt")
                 return
             endif
             " generate text data of n3337 using pdftotext
@@ -97,7 +97,13 @@ function! s:cache_sections() "{{{
 endfunction
 "}}}
 
-function! s:source.gather_candidates(args, context) " {{{
+" gather candidates {{{
+function! s:cache_and_gather_candidates(args, context)
+
+    " g:unite_n3337_txt must be set by a user or on_init hook.
+    if !exists('g:unite_n3337_txt')
+        return []
+    endif
 
     if !filereadable(g:unite_data_directory."/n3337/sections")
         call s:cache_sections()
@@ -115,6 +121,8 @@ function! s:source.gather_candidates(args, context) " {{{
     "}}}
 
 endfunction
+
+let s:source.gather_candidates = function(s:SID.'cache_and_gather_candidates')
 "}}}
 
 " original actions {{{
