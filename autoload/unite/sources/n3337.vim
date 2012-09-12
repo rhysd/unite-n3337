@@ -137,7 +137,7 @@ function! s:open_and_jump_n3337(line) "{{{
     if !exists('b:current_syntax') || b:current_syntax !=# 'n3337'
         setl syntax=unite-source-N3337
         let b:current_syntax = 'n3337'
-        setl nowrap nonumber
+        setl nowrap nonumber nolist
     endif
     execute a:line
     normal! zz
