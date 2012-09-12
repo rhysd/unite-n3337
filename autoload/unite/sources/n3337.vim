@@ -8,11 +8,10 @@ let s:source = {
     \   "name" : "n3337",
     \   "description" : "quick look into N3337, Working Draft standard for C++ which is the nearest to ISO/IEC 14882/2011.",
     \   "default_action" : {'common' : 'n3337'},
+    \   "syntax" : "uniteSource__N3337",
     \   "action_table" : {},
+    \   "hooks" : {},
     \}
-
-" hooks
-let s:source.hooks = {}
 
 function! unite#sources#n3337#define()
     return s:source
@@ -112,12 +111,19 @@ function! s:cache_and_gather_candidates(args, context)
     " make candidates from cache {{{
     let sections = map( readfile(g:unite_data_directory."/n3337/sections"),"split(v:val,'\t')" )
 
-    return map(sections, "{
-    \ 'word' : v:val[1].repeat(' ', 15-strlen(v:val[1])).': '
-                \ .(g:unite_n3337_indent_section ? repeat('  ', len(split(v:val[1],'\\.'))-1) : '').v:val[2],
-    \ 'is_multiline' : g:unite_n3337_is_multiline,
-    \ 'action__n3337_line' : v:val[0]
-    \ }" )
+    if g:unite_n3337_indent_section
+        return map(sections, "{
+                    \ 'word' : repeat('  ', len(split(v:val[1],'\\.'))-1).v:val[1].': '.v:val[2],
+                    \ 'is_multiline' : g:unite_n3337_is_multiline,
+                    \ 'action__n3337_line' : v:val[0]
+                    \ }" )
+    else
+        return map(sections, "{
+                    \ 'word' : v:val[1].repeat(' ', 12-strlen(v:val[1])).': '.v:val[2],
+                    \ 'is_multiline' : g:unite_n3337_is_multiline,
+                    \ 'action__n3337_line' : v:val[0]
+                    \ }" )
+    endif
     "}}}
 
 endfunction
@@ -190,5 +196,13 @@ let s:my_action_table.edit = s:my_action_table.n3337
 "}}}
 "}}}
 
+function! s:syntax_candidates(args,context)
+    syntax match uniteSource__N3337_Number /\d[0-9\.]*/ contained containedin=uniteSource__N3337 nextgroup=uniteSource__N3337_Separator
+    syntax match uniteSource__N3337_Separator /:/ contained containedin=uniteSource__N3337
+    highlight default link uniteSource__N3337_Number Type
+    highlight default link uniteSource__N3337_Separator Type
+endfunction
+
+let s:source.hooks.on_syntax = function(s:SID.'syntax_candidates')
 let &cpo = s:save_cpo
 unlet s:save_cpo
