@@ -5,8 +5,8 @@ elseif exists('b:current_syntax')
 endif
 
 syntax match uniteN3337SectionTitle     /^\s\+[0-9.]\+\s\+[^\[]\+\[[a-z.]\+]$/
-syntax region uniteN3337Example         start='\[ Example:' end='end[ \n]\s*example \]' contains=uniteN3337ExampleNotice
-syntax region uniteN3337Note            start='\[ Note:' end='end[ \n]\s*note \]' contains=uniteN3337NoteNotice
+syntax region uniteN3337Example         start='\[ Example:' end='end[ \n]\s*example \]' contains=uniteN3337ExampleNotice,uniteN3337Footer,uniteN3337Header
+syntax region uniteN3337Note            start='\[ Note:' end='end[ \n]\s*note \]' contains=uniteN3337NoteNotice,uniteN3337Footer,uniteN3337Header
 syntax match uniteN3337ExampleNotice    /Example:/ contained
 syntax match uniteN3337NoteNotice       /Note:/ contained
 syntax match uniteN3337Item             /—/
