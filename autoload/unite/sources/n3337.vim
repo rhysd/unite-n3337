@@ -19,11 +19,12 @@ endfunction
 "}}}
 
 " helpers "{{{
-function! s:system(cmd) "{{{
+function! s:system(...) "{{{
+    let cmd = join(a:000, ' ')
     try
-        call vimproc#system(a:cmd)
+        call vimproc#system(cmd)
     catch
-        call system(a:cmd)
+        call system(cmd)
     endtry
 endfunction
 "}}}
