@@ -87,7 +87,7 @@ function! s:cache_sections() "{{{
 
     for linum in range(1,len(n3337))
         let idx = linum - 1
-        let match = matchlist(n3337[idx],'^\s*\([0-9.]\+\)\s\+\([^\[]\+\)\[[a-z.]\+]$')
+        let match = matchlist(n3337[idx],'^\s*\([0-9.]\+\)\s\+\([^\[]\+\) \[[a-z.]\+]$')
         if !empty(match) && match[2] !~# '^\s\+$'
             call add(sections, linum."\t".match[1]."\t".substitute(match[2], '\s*$','',''))
         endif
