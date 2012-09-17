@@ -197,12 +197,14 @@ let s:my_action_table.edit = s:my_action_table.n3337
 "}}}
 "}}}
 
+" syntax highlight in unite "{{{
 function! s:syntax_candidates(args,context)
     syntax match uniteSource__N3337_Number /\d[0-9\.]*/ contained containedin=uniteSource__N3337 nextgroup=uniteSource__N3337_Separator
     syntax match uniteSource__N3337_Separator /:/ contained containedin=uniteSource__N3337
     highlight default link uniteSource__N3337_Number Type
     highlight default link uniteSource__N3337_Separator Type
 endfunction
+"}}}
 
 let s:source.hooks.on_syntax = function(s:SID.'syntax_candidates')
 let &cpo = s:save_cpo
