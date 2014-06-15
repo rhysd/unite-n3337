@@ -47,9 +47,11 @@ function! s:check_variables_on_init(args,context)
     " use indents of sections or not
     let g:unite_n3337_indent_section = get(g:, "unite_n3337_indent_section", 0)
 
+    let s:data_directory = get(s:, 'data_directory', unite#get_data_directory())
+
     " check data dir  {{{
-    if !isdirectory(g:unite_data_directory."/n3337")
-        call mkdir(g:unite_data_directory."/n3337","p")
+    if !isdirectory(s:data_directory."/n3337")
+        call mkdir(s:data_directory."/n3337","p")
     endif
     "}}}
 
@@ -63,17 +65,17 @@ function! s:check_variables_on_init(args,context)
         "}}}
 
         " check g:unite_n3337_txt {{{
-        if !filereadable(g:unite_data_directory.'/n3337/n3337.txt')
+        if !filereadable(s:data_directory.'/n3337/n3337.txt')
             if !executable('pdftotext')
                 call unite#print_error("Install pdftotext command, or set n3337.txt location to g:unite_n3337_txt")
                 return
             endif
             " generate text data of n3337 using pdftotext
             echo "convert pdf to plain-text..."
-            call s:system("pdftotext -layout -nopgbrk ".g:unite_n3337_pdf." - > ".g:unite_data_directory."/n3337/n3337.txt")
+            call s:system("pdftotext -layout -nopgbrk ".g:unite_n3337_pdf." - > ".s:data_directory."/n3337/n3337.txt")
             echo "done."
         endif
-        let g:unite_n3337_txt = g:unite_data_directory."/n3337/n3337.txt"
+        let g:unite_n3337_txt = s:data_directory."/n3337/n3337.txt"
         "}}}
     endif
 
@@ -93,7 +95,7 @@ function! s:cache_sections() "{{{
         endif
     endfor
 
-    call writefile(sections, g:unite_data_directory."/n3337/sections")
+    call writefile(sections, s:data_directory."/n3337/sections")
 endfunction
 "}}}
 
@@ -105,12 +107,12 @@ function! s:cache_and_gather_candidates(args, context)
         return []
     endif
 
-    if !filereadable(g:unite_data_directory."/n3337/sections")
+    if !filereadable(s:data_directory."/n3337/sections")
         call s:cache_sections()
     endif
 
     " make candidates from cache {{{
-    let sections = map( readfile(g:unite_data_directory."/n3337/sections"),"split(v:val,'\t')" )
+    let sections = map( readfile(s:data_directory."/n3337/sections"),"split(v:val,'\t')" )
 
     if g:unite_n3337_indent_section
         return map(sections, "{
